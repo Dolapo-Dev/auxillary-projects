@@ -1,0 +1,40 @@
+#!/bin/bash
+
+for user in $( cat ./names.csv ); do
+#using a for loop statement
+
+if id "$user" >/dev/null 2>&1;
+
+then
+
+echo "User $user exists"
+echo
+
+else
+
+echo "User $user does not exist"
+
+echo
+
+useradd -g developers -s /bin/bash -m -d /home/$user $user
+
+#developers group has already being created
+
+mkdir -p /home/$user/.ssh
+
+cat /home/ubuntu/Shell/pubkey >> /home/$user/.ssh/authorized_keys
+
+#pubkey file has already been created and the public key has been added to it
+
+chmod 700 /home/$user/.ssh
+chmod 644 /home/$user/.ssh/authorized_keys
+chown -R $user.developers /home/$user/.ssh
+echo
+
+echo "User $user has been created"
+
+echo
+
+fi
+
+done
